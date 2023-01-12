@@ -7,6 +7,7 @@
           :items="availableSites"
           @change="updateAvailableInstruments"
           :loading="instrumentsLoading"
+          :label="'Site Code'"
           >
           </v-autocomplete>
         </v-col>
@@ -14,6 +15,7 @@
           <v-autocomplete
           :items="availableInstruments"
           :loading="instrumentsLoading"
+          :label="'Instrument Code'"
           >
           </v-autocomplete>
         </v-col>
