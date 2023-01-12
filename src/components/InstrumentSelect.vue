@@ -1,23 +1,66 @@
 <template>
-    <b-container fluid>
-        <b-row>
-            <b-col>
-                <SimpleSelect></SimpleSelect>
-            </b-col>
-            <b-col>
-                <SimpleSelect></SimpleSelect>
-            </b-col>
-        </b-row>
-    </b-container>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-autocomplete
+         :items="availableSites"
+         @change="updateAvailableInstruments"
+         :loading="instrumentsLoading"
+        >
+        </v-autocomplete>
+      </v-col>
+      <v-col>
+        <v-autocomplete
+        :items="availableInstruments"
+        :loading="instrumentsLoading"
+        >
+        </v-autocomplete>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import SimpleSelect from '@/components/SimpleSelect';
+  import _ from 'lodash';
 
-export default {
+  export default {
     name: 'InstrumentSelect',
-    components: {
-        SimpleSelect
+    props: {
+    },
+    data() {
+      return {
+        availableInstruments: [],
+        instrumentsLoading: true
+      }
+    },
+    computed: {
+      availableSites: function () {
+        if (this.instrumentsLoading) {
+          return [];
+        }
+        else {
+          return Object.keys(this.$store.state.instrumentData);
+        }
+      },
+    },
+    mounted() {
+      this.$store.dispatch('getInstrumentData')
+        .then(() => {
+          this.instrumentsLoading = false;
+        })
+        .catch(() => {
+          console.log("Failed to retrieve instrument data")
+        })
+    },
+    methods: {
+      updateAvailableInstruments (value) {
+        this.availableInstruments = _.get(this.$store.state.instrumentData, value)
+      }
     }
   }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+
+</style>
