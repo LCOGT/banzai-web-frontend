@@ -1,17 +1,18 @@
 <template>
   <v-container>
     <v-row>
-      <v-col
-      :cols=3>
-        <h2>Select a <br> site/instrument</h2>
+      <v-col :cols="3">
+        <h2>
+          Select a <br />
+          site/instrument
+        </h2>
       </v-col>
       <v-col>
         <InstrumentSelect></InstrumentSelect>
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-      :cols=3>
+      <v-col :cols="3">
         <h2>What would you like to do?</h2>
       </v-col>
       <v-col>
@@ -46,22 +47,20 @@
 </template>
 
 <script>
-  import InstrumentSelect from '@/components/InstrumentSelect.vue'
-  import ReprocessPane from '@/components/ReprocessPane.vue'
+import InstrumentSelect from '@/components/InstrumentSelect.vue'
+import ReprocessPane from '@/components/ReprocessPane.vue'
 
-  export default {
-    name: 'MainWindow',
-    components: {InstrumentSelect, ReprocessPane},
-    data() {
-      return {}
-    },
-    computed: {},
-    mounted() {},
-    methods: {}
-  }
+export default {
+  name: 'MainWindow',
+  components: { InstrumentSelect, ReprocessPane },
+  data() {
+    return {}
+  },
+  computed: {},
+  mounted() {},
+  methods: {},
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-
-</style>
+<style></style>
