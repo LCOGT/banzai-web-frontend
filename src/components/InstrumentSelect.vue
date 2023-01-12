@@ -1,23 +1,25 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-autocomplete
-         :items="availableSites"
-         @change="updateAvailableInstruments"
-         :loading="instrumentsLoading"
-        >
-        </v-autocomplete>
-      </v-col>
-      <v-col>
-        <v-autocomplete
-        :items="availableInstruments"
-        :loading="instrumentsLoading"
-        >
-        </v-autocomplete>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-form>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+          :items="availableSites"
+          @change="updateAvailableInstruments"
+          :loading="instrumentsLoading"
+          >
+          </v-autocomplete>
+        </v-col>
+        <v-col>
+          <v-autocomplete
+          :items="availableInstruments"
+          :loading="instrumentsLoading"
+          >
+          </v-autocomplete>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 </template>
 
 <script>

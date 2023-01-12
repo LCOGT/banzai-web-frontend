@@ -20,7 +20,7 @@ export default new Vuex.Store({
         getInstrumentData (context) {
             return new Promise((resolve, reject) => {
                 $.ajax({
-                  url: context.state.urls.banzaiWebApiUrl + 'api/get_instruments',
+                  url: context.state.urls.banzaiWebApiUrl + 'api/instruments',
                   crossDomain: true,
                   success: function(response) {
                     context.commit('setInstrumentData', response);
