@@ -4,12 +4,11 @@
       app
       color="purple"
       dark
-    >
-      <v-toolbar-title>BANZAI-Web Tools</v-toolbar-title>
+    >  
+      <v-img class="mx-2" src="@/assets/wave.png" max-height="40" max-width="40"></v-img>
+      <v-toolbar-title>BANZAI Web Tools</v-toolbar-title>
     <v-spacer></v-spacer>
     </v-app-bar>
-
-    TODO: Add a component for selecting instrument here
     <v-main>
       <MainWindow></MainWindow>
     </v-main>
