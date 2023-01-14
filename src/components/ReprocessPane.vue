@@ -62,27 +62,23 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-checkbox
-            v-model="allFramesSelected"
-            :label="'All Frames'"
-            reactive
-          >
+          <v-checkbox v-model="allFramesChecked" :label="'All Frames'" reactive>
           </v-checkbox>
         </v-col>
         <v-col>
           <v-checkbox
-            v-model="missingFramesSelected"
+            v-model="missingFramesChecked"
             :label="'Missing Frames'"
-            :disabled="allFramesSelected"
+            :disabled="allFramesChecked"
             reactive
           >
           </v-checkbox>
         </v-col>
         <v-col>
           <v-checkbox
-            v-model="badWcsSelected"
+            v-model="badWcsChecked"
             :label="'Bad WCS'"
-            :disabled="allFramesSelected"
+            :disabled="allFramesChecked"
             reactive
           >
           </v-checkbox>
@@ -98,11 +94,16 @@
           >
             Submit
           </v-btn>
-
           <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
         </v-col>
         <v-col>
-          <v-btn color="warning" class="mr-4" @click="reset">
+          <v-btn
+            :disabled="selectedFrames.length === 0"
+            :loading="reprocessLoading"
+            color="warning"
+            class="mr-4"
+            @click="reprocess"
+          >
             Reprocess!
           </v-btn>
         </v-col>
@@ -110,14 +111,27 @@
     </v-form>
     <v-row>
       <v-col>
-        <v-data-table> </v-data-table>
+        <v-data-table
+          v-model="selectedFrames"
+          :headers="tableHeaders"
+          :items="frameData"
+          :loading="frameDataLoading"
+          item-key="basename"
+          show-select
+          search
+        >
+        </v-data-table>
       </v-col>
     </v-row>
+    <v-snackbar v-model="confirmationDialog" multi-line :timeout="10000">
+      {{ confirmationText }}</v-snackbar
+    >
   </v-container>
 </template>
 
 <script>
 import $ from 'jquery'
+import _ from 'lodash'
 
 export default {
   name: 'ReprocessPane',
@@ -132,48 +146,83 @@ export default {
         .substr(0, 10),
       startMenu: false,
       endMenu: false,
-      allFramesSelected: false,
-      missingFramesSelected: false,
-      badWcsSelected: false,
+      allFramesChecked: false,
+      missingFramesChecked: false,
+      badWcsChecked: false,
+      selectedFrames: [],
       // TODO: Add some validation to the form.
       valid: false,
       frameDataLoading: false,
-      frameData: {},
+      reprocessLoading: false,
+      confirmationText: '',
+      confirmationDialog: false,
+      frameData: [],
+      tableHeaders: [
+        { text: 'Name', value: 'basename' },
+        { text: 'Observation Type', value: 'configuration_type' },
+        { text: 'Filter', value: 'primary_optical_element' },
+      ],
     }
   },
   computed: {},
-  mounted() {},
   methods: {
     submit() {
+      this.frameData = []
+      this.frameDataLoading = true
       // grab form data and send to backend
       let data = JSON.stringify({
         site: this.$store.state.selectedSite,
         instrument: this.$store.state.selectedInstrument,
         dayobs_start: this.startDate,
         dayobs_end: this.endDate,
-        all_frames: this.allFramesSelected,
-        missing_frames: this.missingFramesSelected,
-        bad_wcs: this.badWcsSelected,
+        all_frames: this.allFramesChecked,
+        missing_frames: this.missingFramesChecked,
+        bad_wcs: this.badWcsChecked,
       })
-      $.ajax({
+      $.post({
         url: this.$store.state.urls.banzaiWebApiUrl + 'api/get_frame_list',
-        method: 'POST',
-        contentType: 'application/json',
         data: data,
-        always: function () {
-          this.frameDataLoading = true
-        },
-        success: function (response) {
-          this.frameDataLoading = false
-          this.frameData = response
-        },
-        error: function () {
-          console.log('error!')
-        },
       })
+        .done((response) => {
+          this.frameDataLoading = false
+          this.frameData = _.get(response, 'frames', [])
+        })
+        .fail((response) => {
+          // TODO: Add nice error message if this fails
+          console.log('error!' + response.code)
+          this.frameDataLoading = false
+        })
     },
     reset() {
       this.$refs.form.reset()
+      this.reprocessLoading = false
+      this.frameData = []
+      this.selectedFrames = []
+    },
+    reprocess() {
+      this.reprocessLoading = true
+      let data = JSON.stringify({
+        instrument: this.$store.state.selectedInstrument,
+        frames: this.selectedFrames,
+      })
+      $.post({
+        url:
+          this.$store.state.urls.banzaiWebApiUrl + 'api/reprocess_frame_list',
+        data: data,
+      })
+        .done((response) => {
+          this.reprocessLoading = false
+          this.generateConfirmationPopup(response)
+        })
+        .fail((response) => {
+          // TODO: Add nice error message if this fails
+          console.log('error!' + response.code)
+          this.reprocessLoading = false
+        })
+    },
+    generateConfirmationPopup(response) {
+      let confirmationText = 'foo'
+      this.confirmationDialog = true
     },
   },
 }

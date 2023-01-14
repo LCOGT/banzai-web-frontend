@@ -1,0 +1,16 @@
+{
+  "extends": ["plugin:prettier/recommended",
+              "plugin:vue/base"],
+
+  "plugins": ["prettier", "eslint-plugin-vue"],
+
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2016,
+    "parser": "@babel/eslint-parser"
+  },
+
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
