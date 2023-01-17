@@ -1,18 +1,15 @@
 <template>
   <v-container>
     <v-row>
-      <v-col :cols="3">
-        <h2>
-          Select a <br />
-          site/instrument
-        </h2>
+      <v-col :cols="2">
+        <h2>Select a site/instrument</h2>
       </v-col>
       <v-col>
         <InstrumentSelect></InstrumentSelect>
       </v-col>
     </v-row>
     <v-row>
-      <v-col :cols="3">
+      <v-col :cols="2">
         <h2>What would you like to do?</h2>
       </v-col>
       <v-col>
@@ -29,6 +26,9 @@
             <v-expansion-panel-header>
               Reprocess Images from Bad Super-Calibration
             </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <BadSuperCalReprocessPane></BadSuperCalReprocessPane>
+            </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header>
@@ -49,10 +49,11 @@
 <script>
 import InstrumentSelect from '@/components/InstrumentSelect.vue'
 import ReprocessPane from '@/components/ReprocessPane.vue'
+import BadSuperCalReprocessPane from './BadSuperCalReprocessPane.vue'
 
 export default {
   name: 'MainWindow',
-  components: { InstrumentSelect, ReprocessPane },
+  components: { InstrumentSelect, ReprocessPane, BadSuperCalReprocessPane },
   data() {
     return {}
   },
