@@ -34,6 +34,9 @@
             <v-expansion-panel-header>
               Stack Calibrations
             </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <StackCalibrations></StackCalibrations>
+            </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header>
@@ -49,11 +52,17 @@
 <script>
 import InstrumentSelect from '@/components/InstrumentSelect.vue'
 import ReprocessPane from '@/components/ReprocessPane.vue'
-import BadSuperCalReprocessPane from './BadSuperCalReprocessPane.vue'
+import BadSuperCalReprocessPane from '@/components/BadSuperCalReprocessPane.vue'
+import StackCalibrations from '@/components/StackCalibrations.vue'
 
 export default {
   name: 'MainWindow',
-  components: { InstrumentSelect, ReprocessPane, BadSuperCalReprocessPane },
+  components: {
+    InstrumentSelect,
+    ReprocessPane,
+    BadSuperCalReprocessPane,
+    StackCalibrations,
+  },
   data() {
     return {}
   },
