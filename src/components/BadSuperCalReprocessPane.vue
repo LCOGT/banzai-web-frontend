@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <MarkCalibrations @input="getRelatedFrames"> </MarkCalibrations>
+    <MarkCalibrations @input="getRelatedFrames" supers-only> </MarkCalibrations>
     <v-row>
       <v-col>
         <v-card :disabled="relatedFrameData.length === 0">
@@ -34,9 +34,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-snackbar v-model="confirmationDialog" multi-line :timeout="10000">
-      {{ confirmationText }}</v-snackbar
-    >
   </v-container>
 </template>
 
@@ -44,6 +41,11 @@
 import $ from 'jquery'
 import _ from 'lodash'
 import MarkCalibrations from '@/components/MarkCalibrations.vue'
+import {
+  reportError,
+  reportSuccess,
+  generateReprocessConfirmationText,
+} from '@/util'
 
 export default {
   name: 'BadSuperCalReprocessPane',
@@ -55,8 +57,6 @@ export default {
       selectedRelatedFrames: [],
       relatedFrameDataLoading: false,
       reprocessLoading: false,
-      confirmationText: '',
-      confirmationDialog: false,
       relatedFrameData: [],
       relatedFrameTableHeaders: [
         { text: 'Name', value: 'basename' },
@@ -81,8 +81,7 @@ export default {
           this.relatedFrameData = response.frames
         })
         .fail((response) => {
-          // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
+          reportError(`Error loading related frames. Please contact a softie.`)
           this.relatedFrameDataLoading = false
         })
     },
@@ -99,17 +98,14 @@ export default {
       })
         .done((response) => {
           this.reprocessLoading = false
-          this.generateConfirmationPopup(response)
+          reportSuccess(generateReprocessConfirmationText(response))
         })
         .fail((response) => {
-          // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
+          reportError(
+            `Got an error adding frames to BANZAI reprocessing queue. Contact a softie.`
+          )
           this.reprocessLoading = false
         })
-    },
-    generateConfirmationPopup(response) {
-      this.confirmationText = response.kibana_url
-      this.confirmationDialog = true
     },
   },
 }

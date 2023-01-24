@@ -27,6 +27,7 @@
 
 <script>
 import _ from 'lodash'
+import { reportError } from '@/util'
 
 export default {
   name: 'InstrumentSelect',
@@ -53,7 +54,7 @@ export default {
         this.instrumentsLoading = false
       })
       .catch(() => {
-        console.log('Failed to retrieve instrument data')
+        reportError(`Failed to load available instruments. Contact a softie.`)
       })
   },
   methods: {

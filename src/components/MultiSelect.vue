@@ -20,9 +20,11 @@ export default {
     },
     label: { type: String, optional: false },
   },
-  data: () => ({
-    value: [],
-  }),
+  data() {
+    return {
+      value: [],
+    }
+  },
   methods: {
     onChange(value) {
       this.$emit('input', value)

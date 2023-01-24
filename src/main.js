@@ -5,6 +5,7 @@ import store from './store'
 import $ from 'jquery'
 
 Vue.config.productionTip = false
+export const bus = new Vue()
 
 $.ajax({
   method: 'GET',

@@ -1,78 +1,20 @@
 <template>
   <v-container>
-    <v-form ref="form" v-model="valid">
-      <v-row>
-        <v-col cols="12" sm="6" md="4">
-          <v-menu
-            ref="startMenu"
-            v-model="startMenu"
-            :return-value.sync="startDate"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="startDate"
-                label="Start Date (Inclusive)"
-                prepend-icon="mdi-calendar"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="startDate"
-              reactive
-              no-title
-              scrollable
-              @change="$refs.startMenu.save(startDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="12" sm="6" md="4">
-          <v-menu
-            ref="endMenu"
-            v-model="endMenu"
-            :return-value.sync="endDate"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="endDate"
-                label="End Date (Inclusive)"
-                prepend-icon="mdi-calendar"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="endDate"
-              reactive
-              no-title
-              scrollable
-              @change="$refs.endMenu.save(endDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-col>
-      </v-row>
+    <v-form>
+      <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
       <v-row>
         <v-col>
           <MultiSelect
             label="Calibration Type"
-            :items="calibrationChoices"
-            @input="onCalibrationInput"
+            :items="calibrationTypeOptions"
+            @input="onCalibrationTypeInput"
           ></MultiSelect>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="6">
           <v-btn
-            :disabled="!valid"
+            :disabled="this.selectedCalibrationTypes.length === 0"
             color="success"
             class="mr-4"
             @click="getCalibrationFrames"
@@ -87,7 +29,7 @@
       <v-col>
         <v-card>
           <v-card-title>
-            Super Calibration Frames Found <v-spacer></v-spacer>
+            Calibration Frames Found <v-spacer></v-spacer>
             <v-btn
               :disabled="selectedCalibrationFrames.length === 0"
               :loading="markAsButtonsBusy"
@@ -113,6 +55,7 @@
             :items="calibrationFrameData"
             :loading="calibrationFrameDataLoading"
             item-key="filename"
+            @input="onCalibrationFrameSelected"
             show-select
             search
           >
@@ -127,14 +70,17 @@
 import $ from 'jquery'
 import _ from 'lodash'
 import MultiSelect from '@/components/MultiSelect.vue'
+import StartEndDatePicker from '@/components/StartEndDatePicker.vue'
+import { reportError } from '@/util'
 
 export default {
-  name: 'MarkCalibrations.vue',
+  name: 'MarkCalibrations',
   components: {
     MultiSelect,
+    StartEndDatePicker,
   },
   props: {
-    calibrationChoices: {
+    calibrationTypeOptions: {
       type: Array,
       required: false,
       default() {
@@ -151,31 +97,32 @@ export default {
           { text: 'Is Bad', value: 'is_bad' },
         ]
       },
-      includeSupers: {
-        type: Boolean,
-        required: false,
-        default: true,
-      },
+    },
+    supersOnly: {
+      type: Boolean,
     },
   },
-  data: () => ({
-    startDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-      .toISOString()
-      .substr(0, 10),
-    endDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-      .toISOString()
-      .substr(0, 10),
-    startMenu: false,
-    endMenu: false,
-    observationTypes: [],
-    selectedCalibrationFrames: [],
-    calibrationFrameData: [],
-    valid: false,
-    calibrationFrameDataLoading: false,
-    markAsButtonsBusy: false,
-  }),
+  data() {
+    return {
+      selectedCalibrationTypes: [],
+      selectedCalibrationFrames: [],
+      calibrationFrameData: [],
+      startDate: '',
+      endDate: '',
+      valid: false,
+      calibrationFrameDataLoading: false,
+      markAsButtonsBusy: false,
+    }
+  },
   computed: {},
   methods: {
+    onCalibrationTypeInput(value) {
+      this.selectedCalibrationTypes = value
+    },
+    onDateRangeChange(value) {
+      this.startDate = value.startDate
+      this.endDate = value.endDate
+    },
     getCalibrationFrames() {
       this.calibrationFrameDataLoading = true
       // grab form data and send to backend
@@ -184,8 +131,8 @@ export default {
         instrument: this.$store.state.selectedInstrument,
         dayobs_start: this.startDate,
         dayobs_end: this.endDate,
-        calibration_types: this.observationTypes,
-        include_supers: this.includeSupers,
+        calibration_types: this.selectedCalibrationTypes,
+        supers_only: this.supersOnly,
       })
       $.post({
         url:
@@ -197,10 +144,12 @@ export default {
           this.calibrationFrameData = _.get(response, 'frames', [])
         })
         .fail((response) => {
-          // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
+          reportError(`Error retrieving calibration frames. Contact a softie.`)
           this.calibrationFrameDataLoading = false
         })
+    },
+    onCalibrationFrameSelected(payload) {
+      this.$emit('calibration-selected', payload)
     },
     reset() {
       this.$refs.form.reset()
@@ -208,7 +157,7 @@ export default {
       this.selectedCalibrationFrames = []
     },
     markFrame(markAs) {
-      this.markAsLoading = true
+      this.markAsButtonsBusy = true
       let data = JSON.stringify({
         frames: this.selectedCalibrationFrames,
         mark_as: markAs,
@@ -222,19 +171,15 @@ export default {
       })
         .done((response) => {
           this.getCalibrationFrames()
-          this.markAsLoading = false
+          this.markAsButtonsBusy = false
           if (markAs === 'bad') {
             this.$emit('input', response)
           }
         })
         .fail((response) => {
-          // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
-          this.markAsLoading = false
+          reportError(`Error marking selected frames. Please contact a softie.`)
+          this.markAsButtonsBusy = false
         })
-    },
-    onCalibrationInput(value) {
-      this.observationTypes = value
     },
   },
 }

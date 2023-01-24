@@ -42,10 +42,14 @@
             <v-expansion-panel-header>
               Update Super-Calibration Usable Date Range
             </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <UpdateSuperDateRange></UpdateSuperDateRange>
+            </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
+    <AlertModal></AlertModal>
   </v-container>
 </template>
 
@@ -54,6 +58,8 @@ import InstrumentSelect from '@/components/InstrumentSelect.vue'
 import ReprocessPane from '@/components/ReprocessPane.vue'
 import BadSuperCalReprocessPane from '@/components/BadSuperCalReprocessPane.vue'
 import StackCalibrations from '@/components/StackCalibrations.vue'
+import UpdateSuperDateRange from '@/components/UpdateSuperDateRange.vue'
+import AlertModal from '@/components/AlertModal.vue'
 
 export default {
   name: 'MainWindow',
@@ -62,11 +68,20 @@ export default {
     ReprocessPane,
     BadSuperCalReprocessPane,
     StackCalibrations,
+    UpdateSuperDateRange,
+    AlertModal,
   },
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    noInstrumentSelected: function () {
+      return (
+        this.$store.state.selectedInstrument === undefined &&
+        this.$store.state.selectedSite === undefined
+      )
+    },
+  },
   mounted() {},
   methods: {},
 }

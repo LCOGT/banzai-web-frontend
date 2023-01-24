@@ -1,65 +1,7 @@
 <template>
   <v-container>
     <v-form ref="form" v-model="valid">
-      <v-row>
-        <v-col cols="12" sm="6" md="4">
-          <v-menu
-            ref="startMenu"
-            v-model="startMenu"
-            :return-value.sync="startDate"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="startDate"
-                label="Start Date (Inclusive)"
-                prepend-icon="mdi-calendar"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="startDate"
-              reactive
-              no-title
-              scrollable
-              @change="$refs.startMenu.save(startDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="12" sm="6" md="4">
-          <v-menu
-            ref="endMenu"
-            v-model="endMenu"
-            :return-value.sync="endDate"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="endDate"
-                label="End Date (Inclusive)"
-                prepend-icon="mdi-calendar"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="endDate"
-              reactive
-              no-title
-              scrollable
-              @change="$refs.endMenu.save(endDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-col>
-      </v-row>
+      <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
       <v-row>
         <v-col>
           <v-checkbox v-model="allFramesChecked" :label="'All Frames'" reactive>
@@ -90,7 +32,7 @@
             :disabled="!valid"
             color="success"
             class="mr-4"
-            @click="submit"
+            @click="getFrames"
           >
             Submit
           </v-btn>
@@ -127,29 +69,26 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-snackbar v-model="confirmationDialog" multi-line :timeout="10000">
-      {{ confirmationText }}</v-snackbar
-    >
   </v-container>
 </template>
 
 <script>
 import $ from 'jquery'
 import _ from 'lodash'
-
+import StartEndDatePicker from '@/components/StartEndDatePicker.vue'
+import moment from 'moment'
+import {
+  reportError,
+  reportSuccess,
+  generateReprocessConfirmationText,
+} from '@/util'
 export default {
   name: 'ReprocessPane',
-  props: {},
+  components: { StartEndDatePicker },
   data() {
     return {
-      startDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
-      endDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
-      startMenu: false,
-      endMenu: false,
+      startDate: moment.utc(),
+      endDate: moment.utc(),
       allFramesChecked: false,
       missingFramesChecked: false,
       badWcsChecked: false,
@@ -158,8 +97,6 @@ export default {
       valid: false,
       frameDataLoading: false,
       reprocessLoading: false,
-      confirmationText: '',
-      confirmationDialog: false,
       frameData: [],
       tableHeaders: [
         { text: 'Name', value: 'basename' },
@@ -170,10 +107,13 @@ export default {
   },
   computed: {},
   methods: {
-    submit() {
+    onDateRangeChange(value) {
+      this.startDate = value.startDate
+      this.endDate = value.endDate
+    },
+    getFrames() {
       this.frameData = []
       this.frameDataLoading = true
-      // grab form data and send to backend
       let data = JSON.stringify({
         site: this.$store.state.selectedSite,
         instrument: this.$store.state.selectedInstrument,
@@ -192,8 +132,9 @@ export default {
           this.frameData = _.get(response, 'frames', [])
         })
         .fail((response) => {
+          console.log(response.status)
           // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
+          reportError(`Got an error fetching frames. Contact a softie.`)
           this.frameDataLoading = false
         })
     },
@@ -216,17 +157,14 @@ export default {
       })
         .done((response) => {
           this.reprocessLoading = false
-          this.generateConfirmationPopup(response)
+          reportSuccess(generateReprocessConfirmationText(response))
         })
         .fail((response) => {
-          // TODO: Add nice error message if this fails
-          console.log('error!' + response.code)
+          reportError(
+            `Got an error adding frames to BANZAI reprocessing queue. Contact a softie.`
+          )
           this.reprocessLoading = false
         })
-    },
-    generateConfirmationPopup(response) {
-      this.confirmationText = response.kibana_url
-      this.confirmationDialog = true
     },
   },
 }
