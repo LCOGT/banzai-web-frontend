@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "banzai-web-frontend.fullname" . }}
+  labels:
+    {{- include "banzai-web-frontend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "banzai-web-frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "banzai-web-frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "banzai-web-frontend.serviceAccountName" . }}
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: frontend
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            readOnlyRootFilesystem: true
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            # Set the app configuration using a ConfigMap instead of setting it in the entrypoint of
+            # the docker image. This is preferable because it allows the app configuration volume to
+            # be read-only.
+            - name: DISABLE_OVERWRITE_APP_CONFIG_IN_ENTRYPOINT
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 10
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 10
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: app-configuration
+              mountPath: /app/config
+              readOnly: true
+            - name: nginx-var-cache-nginx
+              mountPath: /var/cache/nginx
+              readOnly: false
+            - name: nginx-var-run
+              mountPath: /var/run
+              readOnly: false
+            - name: init
+              mountPath: /init
+              readOnly: false
+      volumes:
+        - name: app-configuration
+          configMap:
+            name: {{ include "banzai-web-frontend.fullname" . }}
+        - name: nginx-var-cache-nginx
+          emptyDir:
+        - name: init
+          emptyDir:
+        - name: nginx-var-run
+          emptyDir:
+            medium: Memory
+            sizeLimit: 16Mi
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

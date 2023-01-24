@@ -70,7 +70,7 @@ export default {
     getRelatedFrames(framesMarked) {
       this.relatedFrameDataLoading = true
       let data = JSON.stringify({
-        frames: framesMarked,
+        frames_marked: framesMarked,
       })
       $.post({
         url: this.$store.state.urls.banzaiWebApiUrl + 'api/get_related_frames',

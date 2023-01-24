@@ -10,13 +10,13 @@
       <v-col>
         <v-card class="text-center" id="good-after-datepicker">
           <v-card-subtitle> Good After </v-card-subtitle
-          >{{ formatDate(goodAfter) }}</v-card
+          >{{ formatDateTime(goodAfter) }}</v-card
         >
       </v-col>
       <v-col>
         <v-card class="text-center" id="good-before-datepicker"
           ><v-card-subtitle> Good Until </v-card-subtitle
-          >{{ formatDate(goodUntil) }}</v-card
+          >{{ formatDateTime(goodUntil) }}</v-card
         >
       </v-col>
     </v-row>
@@ -100,7 +100,7 @@ export default {
     })
   },
   methods: {
-    formatDate(date) {
+    formatDateTime(date) {
       return date.format(this.dateTimeFormat)
     },
     onCalibrationSelected(payload) {
@@ -110,8 +110,8 @@ export default {
       this.setRangeButtonBusy = true
       let data = JSON.stringify({
         instrument: this.$store.state.selectedInstrument,
-        good_after: this.formatDate(goodAfter),
-        good_until: this.formatDate(goodUntil),
+        good_after: this.formatDateTime(goodAfter),
+        good_until: this.formatDateTime(goodUntil),
         frames: selectedCalibrations,
       })
       $.post({

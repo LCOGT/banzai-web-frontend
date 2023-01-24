@@ -165,7 +165,7 @@ export default {
           this.getCalibrationFrames()
           this.markAsButtonsBusy = false
           if (markAs === 'bad') {
-            this.$emit('input', response)
+            this.$emit('input', response.frames_marked)
           }
         })
         .fail((response) => {
