@@ -1,5 +1,3 @@
 {
-  "archiveApiToken": "asdf",
-  "archiveApiUrl": "https://archive-api.lco.global/",
   "banzaiWebApiUrl": "http://0.0.0.0:9000/"
 }

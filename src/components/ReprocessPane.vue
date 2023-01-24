@@ -36,7 +36,6 @@
           >
             Submit
           </v-btn>
-          <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -76,19 +75,19 @@
 import $ from 'jquery'
 import _ from 'lodash'
 import StartEndDatePicker from '@/components/StartEndDatePicker.vue'
-import moment from 'moment'
 import {
   reportError,
   reportSuccess,
   generateReprocessConfirmationText,
 } from '@/util'
+
 export default {
   name: 'ReprocessPane',
   components: { StartEndDatePicker },
   data() {
     return {
-      startDate: moment.utc(),
-      endDate: moment.utc(),
+      startDate: '',
+      endDate: '',
       allFramesChecked: false,
       missingFramesChecked: false,
       badWcsChecked: false,
@@ -105,7 +104,6 @@ export default {
       ],
     }
   },
-  computed: {},
   methods: {
     onDateRangeChange(value) {
       this.startDate = value.startDate
@@ -137,12 +135,6 @@ export default {
           reportError(`Got an error fetching frames. Contact a softie.`)
           this.frameDataLoading = false
         })
-    },
-    reset() {
-      this.$refs.form.reset()
-      this.reprocessLoading = false
-      this.frameData = []
-      this.selectedFrames = []
     },
     reprocess() {
       this.reprocessLoading = true

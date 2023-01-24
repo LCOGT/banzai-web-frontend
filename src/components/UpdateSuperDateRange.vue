@@ -10,13 +10,13 @@
       <v-col>
         <v-card class="text-center" id="good-after-datepicker">
           <v-card-subtitle> Good After </v-card-subtitle
-          >{{ goodAfter.format(this.dateFormat) }}</v-card
+          >{{ formatDate(goodAfter) }}</v-card
         >
       </v-col>
       <v-col>
         <v-card class="text-center" id="good-before-datepicker"
           ><v-card-subtitle> Good Until </v-card-subtitle
-          >{{ goodUntil.format(this.dateFormat) }}</v-card
+          >{{ formatDate(goodUntil) }}</v-card
         >
       </v-col>
     </v-row>
@@ -36,7 +36,7 @@
           :loading="setRangeButtonBusy"
           color="warning"
         >
-          Reset Date Range</v-btn
+          Reset Date Range Back to Default</v-btn
         >
       </v-col>
     </v-row>
@@ -48,9 +48,12 @@ import MarkCalibrations from '@/components/MarkCalibrations.vue'
 import 'bootstrap-daterangepicker-v2'
 import moment from 'moment'
 import $ from 'jquery'
-import { reportSuccess, reportError } from '@/util'
+import { reportError } from '@/util'
+import DateTimeMixin from '@/mixins/DateTimeMixin.js'
+
 export default {
   name: 'UpdateSuperDateRange',
+  mixins: [DateTimeMixin],
   components: {
     MarkCalibrations,
   },
@@ -70,12 +73,12 @@ export default {
         { text: 'Good After', value: 'good_after' },
         { text: 'Good Until', value: 'good_until' },
       ],
+      selectedCalibrations: [],
+      setRangeButtonBusy: false,
       goodAfter: moment.utc(),
       goodUntil: moment.utc(),
-      selectedCalibrations: [],
-      defaultGoodAfter: moment('1000-01-01 00:00:00Z', this.dateFormat).utc(),
-      defaultgoodUntil: moment('3000-01-01 00:00:00Z', this.dateFormat).utc(),
-      setRangeButtonBusy: false,
+      defaultGoodAfter: moment.utc('1000-01-01 00:00:00', this.dateTimeFormat),
+      defaultGoodUntil: moment.utc('3000-01-01 00:00:00', this.dateTimeFormat),
     }
   },
   mounted: function () {
@@ -85,7 +88,7 @@ export default {
       timePicker: true,
       singleDatePicker: true,
       locale: {
-        format: this.dateFormat,
+        format: this.dateTimeFormat,
       },
       timePicker24Hour: true,
     }
@@ -96,12 +99,10 @@ export default {
       this.goodUntil = start
     })
   },
-  computed: {
-    dateFormat: function () {
-      return 'yyyy-MM-DD HH:mm:ss'
-    },
-  },
   methods: {
+    formatDate(date) {
+      return date.format(this.dateTimeFormat)
+    },
     onCalibrationSelected(payload) {
       this.selectedCalibrations = payload
     },
@@ -109,8 +110,8 @@ export default {
       this.setRangeButtonBusy = true
       let data = JSON.stringify({
         instrument: this.$store.state.selectedInstrument,
-        good_after: goodAfter.format(this.dateFormat),
-        good_until: goodUntil.format(this.dateFormat),
+        good_after: this.formatDate(goodAfter),
+        good_until: this.formatDate(goodUntil),
         frames: selectedCalibrations,
       })
       $.post({
@@ -139,7 +140,7 @@ export default {
       this.submit(
         this.selectedCalibrations,
         this.defaultGoodAfter,
-        this.defaultgoodUntil
+        this.defaultGoodUntil
       )
     },
   },

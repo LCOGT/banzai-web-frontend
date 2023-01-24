@@ -4,14 +4,14 @@
       <v-col>
         <v-card>
           <v-card-subtitle> Start Date/Time </v-card-subtitle
-          >{{ startDate.format(this.dateFormat) }}</v-card
+          >{{ formatDate(startDate) }}</v-card
         >
       </v-col>
       <v-spacer></v-spacer>
       <v-col>
         <v-card
           ><v-card-subtitle> End Date/Time</v-card-subtitle
-          >{{ endDate.format(this.dateFormat) }}</v-card
+          >{{ formatDate(endDate) }}</v-card
         >
       </v-col>
     </v-row>
@@ -22,9 +22,11 @@
 import 'bootstrap-daterangepicker-v2'
 import moment from 'moment'
 import $ from 'jquery'
+import DateTimeMixin from '@/mixins/DateTimeMixin.js'
 
 export default {
   name: 'StartEndDatePicker',
+  mixins: [DateTimeMixin],
   props: {
     enableTimePicker: {
       type: Boolean,
@@ -51,25 +53,35 @@ export default {
       (start, end) => {
         this.startDate = start
         this.endDate = end
+        // emit a signal to update the parent component's start/end date
         this.$emit('input', {
-          startDate: start.format(this.dateFormat),
-          endDate: end.format(this.dateFormat),
+          startDate: this.formatDate(start),
+          endDate: this.formatDate(end),
         })
       }
     )
+    // emit an initial signal to set the parent component's start/end date
+    this.$emit('input', {
+      startDate: this.formatDate(this.startDate),
+      endDate: this.formatDate(this.endDate),
+    })
   },
   computed: {
-    dateFormat: function () {
-      return this.enableTimePicker ? 'yyyy-MM-DD HH:mm:ss' : 'yyyy-MM-DD'
-    },
     pickerElementId: function () {
+      // generate a unique ID for each datepicker element
       return 'date-range-picker-' + this._uid
     },
     pickerStyle: function () {
       return 'display: inline-flex; text-align: right;'
     },
   },
-  methods: {},
+  methods: {
+    formatDate(date) {
+      return this.enableTimePicker
+        ? date.format(this.dateTimeFormat)
+        : date.format(this.dateFormat)
+    },
+  },
 }
 </script>
 <!-- <style>

@@ -1,30 +1,27 @@
 <template>
   <v-container>
-    <v-form>
-      <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
-      <v-row>
-        <v-col>
-          <MultiSelect
-            label="Calibration Type"
-            :items="calibrationTypeOptions"
-            @input="onCalibrationTypeInput"
-          ></MultiSelect>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6">
-          <v-btn
-            :disabled="this.selectedCalibrationTypes.length === 0"
-            color="success"
-            class="mr-4"
-            @click="getCalibrationFrames"
-          >
-            Submit
-          </v-btn>
-          <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
+    <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
+    <v-row>
+      <v-col>
+        <MultiSelect
+          label="Calibration Type"
+          :items="calibrationTypeOptions"
+          @input="onCalibrationTypeInput"
+        ></MultiSelect>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <v-btn
+          :disabled="this.selectedCalibrationTypes.length === 0"
+          color="success"
+          class="mr-4"
+          @click="getCalibrationFrames"
+        >
+          Submit
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col>
         <v-card>
@@ -150,11 +147,6 @@ export default {
     },
     onCalibrationFrameSelected(payload) {
       this.$emit('calibration-selected', payload)
-    },
-    reset() {
-      this.$refs.form.reset()
-      this.calibrationFrameData = []
-      this.selectedCalibrationFrames = []
     },
     markFrame(markAs) {
       this.markAsButtonsBusy = true
