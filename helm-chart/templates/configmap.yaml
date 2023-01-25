@@ -5,5 +5,5 @@ metadata:
 data:
   config.json: |
     {
-      "banzaiWebApiUrl": {{ .Values.banzaiWebApiUrl }}
+      "banzaiWebApiUrl": {{ .Values.banzaiWebApiUrl | quote }}
     }
