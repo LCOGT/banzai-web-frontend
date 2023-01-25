@@ -149,6 +149,7 @@ export default {
       })
         .done((response) => {
           this.reprocessLoading = false
+          this.selectedFrames = []
           reportSuccess(generateReprocessConfirmationText(response))
         })
         .fail((response) => {
