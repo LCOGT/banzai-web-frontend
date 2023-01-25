@@ -2,16 +2,35 @@
   <v-container>
     <v-row>
       <v-col :cols="2">
-        <h2>Select a site/instrument</h2>
+        <v-card>
+          <v-card-title>
+            <p class="text-h6 text--primary">
+              Select a <br />site and <br />instrument
+            </p></v-card-title
+          >
+          <v-card-text
+            >Instruments are pulled directly from the BANZAI
+            Database</v-card-text
+          >
+        </v-card>
       </v-col>
+      <v-divider vertical></v-divider>
       <v-col>
         <InstrumentSelect></InstrumentSelect>
       </v-col>
     </v-row>
     <v-row>
       <v-col :cols="2">
-        <h2>What would you like to do?</h2>
+        <v-card>
+          <v-card-title>
+            <p class="text-h6 text--primary">
+              What would <br />you like to do?
+            </p></v-card-title
+          >
+          <v-card-text>Select a workflow for more information!</v-card-text>
+        </v-card>
       </v-col>
+      <v-divider vertical></v-divider>
       <v-col>
         <v-expansion-panels>
           <v-expansion-panel>
