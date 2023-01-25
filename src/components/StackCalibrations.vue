@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-expansion-panels>
+    <v-expansion-panels multiple>
       <v-expansion-panel>
         <v-expansion-panel-header> Mark Calibrations </v-expansion-panel-header>
         <v-expansion-panel-content>

@@ -32,7 +32,7 @@
       </v-col>
       <v-divider vertical></v-divider>
       <v-col>
-        <v-expansion-panels>
+        <v-expansion-panels multiple>
           <v-expansion-panel>
             <v-expansion-panel-header>
               Reprocess Images
