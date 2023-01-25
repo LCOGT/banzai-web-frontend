@@ -10,7 +10,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ''
 
-banzaiWebApiUrl: 'http://banzai-web-dev.lco.gtn'
+banzaiWebApiUrl: 'http://banzai-web-dev-api.lco.gtn/'
 
 ingress:
   enabled: true
