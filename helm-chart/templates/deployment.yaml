@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "banzai-web-frontend.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "banzai-web-frontend.selectorLabels" . | nindent 6 }}
@@ -24,7 +22,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "banzai-web-frontend.serviceAccountName" . }}
       securityContext:
         fsGroup: 1000
       containers:
