@@ -1,5 +1,13 @@
 <template>
   <v-container>
+    <v-subheader>
+      <h3>
+        <i>
+          Use this pane to manually mark individual calibrations as good or bad,
+          and stack calibrations by type and date range.
+        </i>
+      </h3>
+    </v-subheader>
     <v-expansion-panels multiple>
       <v-expansion-panel>
         <v-expansion-panel-header> Mark Calibrations </v-expansion-panel-header>

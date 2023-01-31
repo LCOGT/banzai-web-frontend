@@ -1,5 +1,14 @@
 <template>
   <v-container>
+    <v-subheader>
+      <h3>
+        <i>
+          Use this pane to manually mark individual super calibrations as bad.
+          Once you have marked them, a list of affected frames will be
+          presented, which can be queued up for re-processing.
+        </i>
+      </h3>
+    </v-subheader>
     <MarkCalibrations @input="getRelatedFrames" supers-only> </MarkCalibrations>
     <v-row>
       <v-col>

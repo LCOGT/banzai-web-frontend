@@ -1,44 +1,50 @@
 <template>
   <v-container>
-    <v-form ref="form" v-model="valid">
-      <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
-      <v-row>
-        <v-col>
-          <v-checkbox v-model="allFramesChecked" :label="'All Frames'" reactive>
-          </v-checkbox>
-        </v-col>
-        <v-col>
-          <v-checkbox
-            v-model="missingFramesChecked"
-            :label="'Missing Frames'"
-            :disabled="allFramesChecked"
-            reactive
-          >
-          </v-checkbox>
-        </v-col>
-        <v-col>
-          <v-checkbox
-            v-model="badWcsChecked"
-            :label="'Bad WCS'"
-            :disabled="allFramesChecked"
-            reactive
-          >
-          </v-checkbox>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="8">
-          <v-btn
-            :disabled="!valid"
-            color="success"
-            class="mr-4"
-            @click="getFrames"
-          >
-            Submit
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
+    <v-subheader>
+      <h3>
+        <i>
+          Use this pane to manually re-process images from a given site/camera
+          and date range, based on some criteria.
+        </i>
+      </h3>
+    </v-subheader>
+    <StartEndDatePicker @input="onDateRangeChange"></StartEndDatePicker>
+    <v-row>
+      <v-col>
+        <v-checkbox v-model="allFramesChecked" :label="'All Frames'" reactive>
+        </v-checkbox>
+      </v-col>
+      <v-col>
+        <v-checkbox
+          v-model="missingFramesChecked"
+          :label="'Missing Frames'"
+          :disabled="allFramesChecked"
+          reactive
+        >
+        </v-checkbox>
+      </v-col>
+      <v-col>
+        <v-checkbox
+          v-model="badWcsChecked"
+          :label="'Bad WCS'"
+          :disabled="allFramesChecked"
+          reactive
+        >
+        </v-checkbox>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="8">
+        <v-btn
+          :disabled="!valid"
+          color="success"
+          class="mr-4"
+          @click="getFrames"
+        >
+          Submit
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col>
         <v-card :disabled="frameData.length === 0">
@@ -92,8 +98,6 @@ export default {
       missingFramesChecked: false,
       badWcsChecked: false,
       selectedFrames: [],
-      // TODO: Add some validation to the form.
-      valid: false,
       frameDataLoading: false,
       reprocessLoading: false,
       frameData: [],

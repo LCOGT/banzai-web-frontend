@@ -1,5 +1,16 @@
 <template>
   <v-container>
+    <v-subheader>
+      <h3>
+        <i>
+          Use this pane to update the "Good After" and "Good Until" parameters
+          for any number of super calibrations in the BANZAI database. The "Good
+          After" and "Good Until" define the time range for which a super
+          calibration may be used. Any science frame whose DATE-OBS lies within
+          this time range can be reduced using that master calibration.
+        </i>
+      </h3>
+    </v-subheader>
     <MarkCalibrations
       supers-only
       :calibration-table-headers="calibrationTableHeaders"
