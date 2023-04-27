@@ -7,7 +7,7 @@
           for any number of super calibrations in the BANZAI database. The "Good
           After" and "Good Until" define the time range for which a super
           calibration may be used. Any science frame whose DATE-OBS lies within
-          this time range can be reduced using that master calibration.
+          this time range can be reduced using that super calibration.
         </i>
       </h3>
     </v-subheader>
