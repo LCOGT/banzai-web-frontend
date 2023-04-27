@@ -65,6 +65,14 @@
               <UpdateSuperDateRange></UpdateSuperDateRange>
             </v-expansion-panel-content>
           </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              View Skyflat Information
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <FlatAgeTable></FlatAgeTable>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
@@ -79,6 +87,7 @@ import BadSuperCalReprocessPane from '@/components/BadSuperCalReprocessPane.vue'
 import StackCalibrations from '@/components/StackCalibrations.vue'
 import UpdateSuperDateRange from '@/components/UpdateSuperDateRange.vue'
 import AlertModal from '@/components/AlertModal.vue'
+import FlatAgeTable from '@/components/FlatAgeTable.vue'
 
 export default {
   name: 'MainWindow',
@@ -89,6 +98,7 @@ export default {
     StackCalibrations,
     UpdateSuperDateRange,
     AlertModal,
+    FlatAgeTable,
   },
   data() {
     return {}

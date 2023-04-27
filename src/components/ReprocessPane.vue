@@ -59,10 +59,25 @@
             :headers="tableHeaders"
             :items="frameData"
             :loading="frameDataLoading"
+            :search="search"
             item-key="basename"
             show-select
-            search
+            :footer-props="{
+              disablePagination: true,
+              itemsPerPageOptions: [-1],
+            }"
           >
+            <template v-slot:top>
+              <v-row>
+                <v-col md="9">
+                  <v-text-field
+                    v-model="search"
+                    label="Search"
+                    class="mx-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -87,6 +102,7 @@ export default {
     return {
       startDate: '',
       endDate: '',
+      search: '',
       allFramesChecked: false,
       missingFramesChecked: false,
       badWcsChecked: false,

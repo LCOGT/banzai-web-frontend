@@ -1,31 +1,46 @@
 <template>
-  <v-container :id="pickerElementId" class="text-center">
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-subtitle> Start Date/Time </v-card-subtitle
-          >{{ formatDate(startDate) }}</v-card
-        >
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col>
-        <v-card
-          ><v-card-subtitle> End Date/Time</v-card-subtitle
-          >{{ formatDate(endDate) }}</v-card
-        >
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row justify="center">
+    <date-picker
+      v-model="selectedTimeRange"
+      range
+      :clearable="false"
+      :format="pickerFormat"
+      @change="onDatePickerChange"
+      :type="pickerType"
+      class="my-4"
+    >
+      <template v-slot:input>
+        <v-container>
+          <v-row>
+            <v-col md="6">
+              <v-card class="text-center">
+                <v-card-subtitle> Start Date/Time </v-card-subtitle
+                >{{ formatDate(startDate) }}</v-card
+              >
+            </v-col>
+            <v-spacer></v-spacer>
+            <v-col md="6">
+              <v-card class="text-center"
+                ><v-card-subtitle> End Date/Time</v-card-subtitle
+                >{{ formatDate(endDate) }}</v-card
+              >
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+    </date-picker>
+  </v-row>
 </template>
 
 <script>
-import 'bootstrap-daterangepicker-v2'
 import moment from 'moment'
-import $ from 'jquery'
 import DateTimeMixin from '@/mixins/DateTimeMixin.js'
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 
 export default {
   name: 'StartEndDatePicker',
+  components: { DatePicker },
   mixins: [DateTimeMixin],
   props: {
     enableTimePicker: {
@@ -35,47 +50,36 @@ export default {
     },
   },
   data() {
-    return { startDate: moment.utc(), endDate: moment.utc() }
+    return { selectedTimeRange: [new Date(), new Date()] }
   },
   mounted: function () {
-    let pickerElementId = `#${this.pickerElementId}`
-    $(pickerElementId).daterangepicker(
-      {
-        timePicker: this.enableTimePicker,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        timePicker24Hour: true,
-        opens: 'auto',
-        locale: {
-          format: this.dateFormat,
-        },
-      },
-      (start, end) => {
-        this.startDate = start
-        this.endDate = end
-        // emit a signal to update the parent component's start/end date
-        this.$emit('input', {
-          startDate: this.formatDate(start),
-          endDate: this.formatDate(end),
-        })
-      }
-    )
     // emit an initial signal to set the parent component's start/end date
     this.$emit('input', {
-      startDate: this.formatDate(this.startDate),
-      endDate: this.formatDate(this.endDate),
+      startDate: this.formatDate(moment(this.selectedTimeRange[0])),
+      endDate: this.formatDate(moment(this.selectedTimeRange[1])),
     })
   },
   computed: {
-    pickerElementId: function () {
-      // generate a unique ID for each datepicker element
-      return 'date-range-picker-' + this._uid
+    startDate: function () {
+      return moment(this.selectedTimeRange[0])
     },
-    pickerStyle: function () {
-      return 'display: inline-flex; text-align: right;'
+    endDate: function () {
+      return moment(this.selectedTimeRange[1])
+    },
+    pickerType: function () {
+      return this.enableTimePicker ? 'datetime' : 'date'
+    },
+    pickerFormat: function () {
+      return this.enableTimePicker ? this.dateTimeFormat : this.dateFormat
     },
   },
   methods: {
+    onDatePickerChange: function () {
+      this.$emit('input', {
+        startDate: this.formatDate(moment(this.selectedTimeRange[0])),
+        endDate: this.formatDate(moment(this.selectedTimeRange[1])),
+      })
+    },
     formatDate(date) {
       return this.enableTimePicker
         ? date.format(this.dateTimeFormat)
@@ -84,12 +88,8 @@ export default {
   },
 }
 </script>
-<!-- <style>
-.daterangepicker .clearfix {
-  display: inline-flex;
+<style>
+.mx-icon-calendar {
+  display: none;
 }
-
-.daterangepicker .apply-cancel-buttons {
-  text-align: right;
-}
-</style> -->
+</style>

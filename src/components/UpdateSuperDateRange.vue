@@ -17,20 +17,10 @@
       @calibration-selected="onCalibrationSelected"
       ref="markCalibrations"
     ></MarkCalibrations>
-    <v-row>
-      <v-col>
-        <v-card class="text-center" id="good-after-datepicker">
-          <v-card-subtitle> Good After </v-card-subtitle
-          >{{ formatDateTime(goodAfter) }}</v-card
-        >
-      </v-col>
-      <v-col>
-        <v-card class="text-center" id="good-before-datepicker"
-          ><v-card-subtitle> Good Until </v-card-subtitle
-          >{{ formatDateTime(goodUntil) }}</v-card
-        >
-      </v-col>
-    </v-row>
+    <StartEndDatePicker
+      @input="onDateRangeChange"
+      enableTimePicker
+    ></StartEndDatePicker>
     <v-row class="text-center">
       <v-col>
         <v-btn
@@ -47,8 +37,8 @@
           :loading="setRangeButtonBusy"
           color="warning"
         >
-          Reset Date Range Back to Default</v-btn
-        >
+          Reset Date Range
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -61,12 +51,14 @@ import moment from 'moment'
 import $ from 'jquery'
 import { reportError } from '@/util'
 import DateTimeMixin from '@/mixins/DateTimeMixin.js'
+import StartEndDatePicker from '@/components/StartEndDatePicker.vue'
 
 export default {
   name: 'UpdateSuperDateRange',
   mixins: [DateTimeMixin],
   components: {
     MarkCalibrations,
+    StartEndDatePicker,
   },
   props: {
     items: {
@@ -86,33 +78,16 @@ export default {
       ],
       selectedCalibrations: [],
       setRangeButtonBusy: false,
-      goodAfter: moment.utc(),
-      goodUntil: moment.utc(),
-      defaultGoodAfter: moment.utc('1000-01-01 00:00:00', this.dateTimeFormat),
-      defaultGoodUntil: moment.utc('3000-01-01 00:00:00', this.dateTimeFormat),
+      goodAfter: '',
+      goodUntil: '',
+      defaultGoodAfter: '1000-01-01 00:00:00',
+      defaultGoodUntil: '3000-01-01 00:00:00',
     }
-  },
-  mounted: function () {
-    let datePickerOptions = {
-      startDate: this.goodAfter,
-      endDate: this.goodUntil,
-      timePicker: true,
-      singleDatePicker: true,
-      locale: {
-        format: this.dateTimeFormat,
-      },
-      timePicker24Hour: true,
-    }
-    $('#good-after-datepicker').daterangepicker(datePickerOptions, (start) => {
-      this.goodAfter = start
-    })
-    $('#good-before-datepicker').daterangepicker(datePickerOptions, (start) => {
-      this.goodUntil = start
-    })
   },
   methods: {
-    formatDateTime(date) {
-      return date.format(this.dateTimeFormat)
+    onDateRangeChange(value) {
+      this.goodAfter = value.startDate
+      this.goodUntil = value.endDate
     },
     onCalibrationSelected(payload) {
       this.selectedCalibrations = payload
@@ -121,8 +96,8 @@ export default {
       this.setRangeButtonBusy = true
       let data = JSON.stringify({
         instrument: this.$store.state.selectedInstrument,
-        good_after: this.formatDateTime(goodAfter),
-        good_until: this.formatDateTime(goodUntil),
+        good_after: goodAfter,
+        good_until: goodUntil,
         frames: selectedCalibrations,
       })
       $.post({
@@ -138,8 +113,8 @@ export default {
         })
         .fail((response) => {
           reportError(
-            `Error updating date range for selected super calibration(s)<br>
-            Please contact a softie.`
+            `Error updating date range for selected super calibration(s)<br>. 
+            Please try again, if problem persists, contact a softie.`
           )
           this.setRangeButtonBusy = false
         })

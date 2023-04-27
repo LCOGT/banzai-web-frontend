@@ -51,11 +51,26 @@
             :headers="calibrationTableHeaders"
             :items="calibrationFrameData"
             :loading="calibrationFrameDataLoading"
+            :search="search"
             item-key="filename"
             @input="onCalibrationFrameSelected"
             show-select
-            search
+            :footer-props="{
+              disablePagination: true,
+              itemsPerPageOptions: [-1],
+            }"
           >
+            <template v-slot:top>
+              <v-row>
+                <v-col md="9">
+                  <v-text-field
+                    v-model="search"
+                    label="Search"
+                    class="mx-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -106,6 +121,7 @@ export default {
       calibrationFrameData: [],
       startDate: '',
       endDate: '',
+      search: '',
       valid: false,
       calibrationFrameDataLoading: false,
       markAsButtonsBusy: false,
@@ -169,7 +185,9 @@ export default {
           }
         })
         .fail((response) => {
-          reportError(`Error marking selected frames. Please contact a softie.`)
+          reportError(
+            `Error marking selected frames. Please try again. If problem persists, contact a softie.`
+          )
           this.markAsButtonsBusy = false
         })
     },

@@ -118,7 +118,7 @@ export default {
         })
         .fail((response) => {
           reportError(
-            'Failed to add stacking tasks to BANZAI task queue. Please contact a softie.'
+            'Failed to add stacking tasks to BANZAI task queue. Please try again. If problem persists, contact a softie.'
           )
           this.stackButtonBusy = false
         })

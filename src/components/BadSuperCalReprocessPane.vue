@@ -35,10 +35,25 @@
             :headers="relatedFrameTableHeaders"
             :items="relatedFrameData"
             :loading="relatedFrameDataLoading"
+            :search="search"
             item-key="filename"
             show-select
-            search
+            :footer-props="{
+              disablePagination: true,
+              itemsPerPageOptions: [-1],
+            }"
           >
+            <template v-slot:top>
+              <v-row>
+                <v-col md="9">
+                  <v-text-field
+                    v-model="search"
+                    label="Search"
+                    class="mx-4"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -66,11 +81,13 @@ export default {
       selectedRelatedFrames: [],
       relatedFrameDataLoading: false,
       reprocessLoading: false,
+      search: '',
       relatedFrameData: [],
       relatedFrameTableHeaders: [
         { text: 'Name', value: 'basename' },
         { text: 'Observation Type', value: 'configuration_type' },
         { text: 'Filter', value: 'primary_optical_element' },
+        { text: 'Super Calibration Used', value: 'super_calibration_used' },
       ],
     }
   },
@@ -90,7 +107,9 @@ export default {
           this.relatedFrameData = response.frames
         })
         .fail((response) => {
-          reportError(`Error loading related frames. Please contact a softie.`)
+          reportError(
+            `Error loading related frames. Please try again. If problem persists, contact a softie.`
+          )
           this.relatedFrameDataLoading = false
         })
     },
@@ -111,7 +130,7 @@ export default {
         })
         .fail((response) => {
           reportError(
-            `Got an error adding frames to BANZAI reprocessing queue. Contact a softie.`
+            `Got an error adding frames to BANZAI reprocessing queue. Please try again. If problem persists, contact a softie.`
           )
           this.reprocessLoading = false
         })

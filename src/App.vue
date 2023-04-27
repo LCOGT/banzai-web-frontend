@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="purple" dark>
+    <v-app-bar id="title-bar" app dark color="#0b3053">
       <v-img
         class="mx-2"
         src="@/assets/wave.png"
@@ -29,3 +29,9 @@ export default {
   }),
 }
 </script>
+
+<style>
+.title-bar {
+  color: #065c99;
+}
+</style>
