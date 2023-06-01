@@ -96,7 +96,15 @@ export default {
       type: Array,
       required: false,
       default() {
-        return ['BIAS', 'DARK', 'SKYFLAT', 'LAMPFLAT', 'DOUBLE']
+        return [
+          'BIAS',
+          'DARK',
+          'SKYFLAT',
+          'LAMPFLAT',
+          'DOUBLE',
+          'BPM',
+          'READNOISE',
+        ]
       },
     },
     calibrationTableHeaders: {

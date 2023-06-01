@@ -78,7 +78,15 @@ export default {
   },
   data() {
     return {
-      calibrationTypeOptions: ['BIAS', 'DARK', 'SKYFLAT', 'LAMPFLAT', 'DOUBLE'],
+      calibrationTypeOptions: [
+        'BIAS',
+        'DARK',
+        'SKYFLAT',
+        'LAMPFLAT',
+        'DOUBLE',
+        'BPM',
+        'READNOISE',
+      ],
       selectedCalibrationTypes: [],
       stackingStartDate: '',
       stackingEndDate: '',
