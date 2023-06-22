@@ -1,5 +1,14 @@
 <template>
   <v-container>
+    <v-subheader>
+      <h3>
+        <i>
+          Use this pane to view an on-demand network flat age table. Please be
+          patient while the data loads, it may take a couple of minutes. Bear in
+          mind once fetched, data is cached for 15 minutes.
+        </i>
+      </h3>
+    </v-subheader>
     <v-row>
       <v-col>
         <v-btn :loading="dataLoading" @click="getFlatData" color="warning"
