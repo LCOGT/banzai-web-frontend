@@ -73,6 +73,14 @@
               <FlatAgeTable></FlatAgeTable>
             </v-expansion-panel-content>
           </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              View Network-Wide Skyflat Table
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <NetworkFlatAgeTable></NetworkFlatAgeTable>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
@@ -88,6 +96,7 @@ import StackCalibrations from '@/components/StackCalibrations.vue'
 import UpdateSuperDateRange from '@/components/UpdateSuperDateRange.vue'
 import AlertModal from '@/components/AlertModal.vue'
 import FlatAgeTable from '@/components/FlatAgeTable.vue'
+import NetworkFlatAgeTable from '@/components/NetworkFlatAgeTable.vue'
 
 export default {
   name: 'MainWindow',
@@ -99,6 +108,7 @@ export default {
     UpdateSuperDateRange,
     AlertModal,
     FlatAgeTable,
+    NetworkFlatAgeTable,
   },
   data() {
     return {}
