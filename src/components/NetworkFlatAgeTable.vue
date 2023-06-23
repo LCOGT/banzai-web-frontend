@@ -9,6 +9,8 @@
         </i>
       </h3>
     </v-subheader>
+    <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
     <v-row>
       <v-col>
         <v-btn :loading="dataLoading" @click="getFlatData" color="warning"
@@ -115,6 +117,7 @@ export default {
         xaxis: {
           side: 'top',
           showgrid: true,
+          automargin: true,
         },
         yaxis: {
           autosize: true,
@@ -150,7 +153,9 @@ export default {
       let zData = []
 
       for (let record of flatData) {
-        xLabels.push(`${record.x}-${record.record.configuration_mode}`)
+        xLabels.push(
+          `${record.record.site}/${record.x}-${record.record.configuration_mode}`
+        )
         yLabels.push(record.y)
         zData.push(record.record.age)
       }
