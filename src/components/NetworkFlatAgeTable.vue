@@ -171,9 +171,8 @@ export default {
           showscale: false,
           colorscale: [
             [0, 'rgb(147,196,125)'],
-            [7 / _.max([_.max(zData), 1500]), 'rgb(255,217,102)'], // colors 7 and above should go yellow
-            [14 / _.max([_.max(zData), 1500]), 'rgb(224, 102, 102)'], // colors 14 and above should go red
-            [1, 'rgb(224, 102, 102)'],
+            [14 / _.max([_.max(zData), 1500]), 'rgb(227, 97, 237)'], // colors 14 and above should go magenta
+            [1, 'rgb(227, 97, 237)'],
           ],
         },
       ]
