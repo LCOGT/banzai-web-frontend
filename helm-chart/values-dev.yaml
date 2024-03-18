@@ -16,6 +16,7 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx-lco-earth
+    cert-manager.io/cluster-issuer: letsencrypt-lco-earth
   hosts:
     - host: 'banzai-web.lco.earth'
       paths:
