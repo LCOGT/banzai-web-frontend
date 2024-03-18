@@ -10,14 +10,14 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ''
 
-banzaiWebApiUrl: 'http://banzai-web-api-dev.lco.gtn/'
+banzaiWebApiUrl: 'https://banzai-web-api.lco.earth/'
 
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: nginx-ingress-private
+    kubernetes.io/ingress.class: nginx-lco-earth
   hosts:
-    - host: 'banzai-web-new.lco.gtn'
+    - host: 'banzai-web.lco.earth'
       paths:
         - path: /
           pathType: ImplementationSpecific
