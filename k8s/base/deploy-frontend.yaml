@@ -16,8 +16,9 @@ spec:
         app.kubernetes.io/component: frontend
     spec:
       volumes:
-      - configMap:
-        name: app-configuration
+      - name: config
+        configMap:
+          name: app-configuration
       - emptyDir: {}
         name: nginx-var-cache-nginx
       - emptyDir: {}
@@ -26,6 +27,11 @@ spec:
           medium: Memory
           sizeLimit: 16Mi
         name: nginx-var-run
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
         - name: default
           image: banzai-web-frontend
@@ -65,13 +71,9 @@ spec:
               memory: 32Mi
           securityContext:
             readOnlyRootFilesystem: true
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
-            fsGroup: 1000
           volumeMounts:
-          - mountPath: /app/config
-            name: app-configuration
+          - mountPath: /app/config/
+            name: config
             readOnly: true
           - mountPath: /var/cache/nginx
             name: nginx-var-cache-nginx
