@@ -20,13 +20,10 @@ Deploy dependencies:
 skaffold -p deps run
 ```
 
-Configure environment variables using `./k8s/envs/local/settings.env` and sensitive
-environment variables using `./k8s/envs/local/secrets.env`.
-
 Start development loop:
 
 ```shell
-skaffold -p app dev
+skaffold -p app dev --port-forward
 ```
 
 ## Development with yarn on bare metal
