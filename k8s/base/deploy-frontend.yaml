@@ -3,17 +3,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server
+  name: frontend
   labels:
-    app.kubernetes.io/component: server
+    app.kubernetes.io/component: frontend
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/component: server
+      app.kubernetes.io/component: frontend
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: server
+        app.kubernetes.io/component: frontend
     spec:
       volumes:
       - configMap:
@@ -27,7 +27,7 @@ spec:
           sizeLimit: 16Mi
         name: nginx-var-run
       containers:
-        - name: frontend
+        - name: default
           image: banzai-web-frontend
           env:
           - name: DISABLE_OVERWRITE_APP_CONFIG_IN_ENTRYPOINT
