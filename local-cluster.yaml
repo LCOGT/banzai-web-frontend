@@ -1,0 +1,6 @@
+apiVersion: ctlptl.dev/v1alpha1
+kind: Cluster
+name: kind-banzai-web-frontend
+product: kind
+registry: lco-local
+kubernetesVersion: v1.22.17

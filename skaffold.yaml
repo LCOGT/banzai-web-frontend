@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: banzai-web-frontend
+profiles:
+  - name: app
+    build:
+      tagPolicy:
+        gitCommit:
+          variant: Tags
+      local:
+        push: true
+      artifacts:
+        - image: banzai-web-frontend
+          custom:
+            buildCommand: skaffold-builder-buildx
+            dependencies:
+              dockerfile:
+                path: Dockerfile
+    manifests:
+      kustomize:
+        paths:
+          - k8s/envs/local/
+    deploy:
+      kubectl: {}
