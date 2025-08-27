@@ -35,15 +35,15 @@ devenv-k8s-cluster-up
 Deploy application dependencies:
 
 ```sh
-skaffold -m <app>-deps run
+skaffold -m banzai-web-frontend-deps run
 ```
 
 Start application development loop:
 
 ```sh
-skaffold -m <app> dev
+skaffold -m banzai-web-frontend dev
 ```
 
 If there are any Ingresses, they should be exposed at:
-  - https://<app>.local.lco.earth
+  - https://banzai-web-frontend.local.lco.earth
   - https://<dependency>-<app>.local.lco.earth
