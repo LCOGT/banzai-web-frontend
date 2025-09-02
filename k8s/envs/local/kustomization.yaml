@@ -3,9 +3,12 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - ./ing/
 
 configMapGenerator:
   - name: app-configuration
     behavior: replace
     files:
     - ./config.json
+
+namespace: banzai-web-frontend

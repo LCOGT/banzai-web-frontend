@@ -1,30 +1,8 @@
 # banzai-web-frontend
 
-## Development with Skaffold
+## Development
+See [DEVELOPMENT.md](DEVELOPMENT_K8s.md) for instructions on setting up a local development environment.
 
-Enter development shell:
-
-```shell
-nix develop --impure
-```
-
-Start a local development container registry and Kubernetes cluster:
-
-```shell
-ctlptl apply -f local-registry.yaml -f local-cluster.yaml
-```
-
-Deploy dependencies:
-
-```shell
-skaffold -p deps run
-```
-
-Start development loop:
-
-```shell
-skaffold -p app dev --port-forward
-```
 
 ## Development with yarn on bare metal
 
