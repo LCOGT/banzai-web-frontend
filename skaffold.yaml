@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta10
 kind: Config
 metadata:
-  name: banzai-web-frontend
+  name: app
 build:
   tagPolicy:
     gitCommit:
@@ -25,7 +25,7 @@ deploy:
 apiVersion: skaffold/v4beta10
 kind: Config
 metadata:
-  name: banzai-web-frontend-deps
+  name: deps
 manifests:
   kustomize:
     paths:

@@ -24,6 +24,12 @@ Otherwise, you can manually enter the shell with:
 
 ## Development Cluster
 
+If your docker daemon isn't running start it with 
+
+```sh
+sudo service docker start
+```
+
 Spin up the development cluster with:
 
 ```sh
@@ -35,13 +41,13 @@ devenv-k8s-cluster-up
 Deploy application dependencies:
 
 ```sh
-skaffold -m banzai-web-frontend-deps run
+skaffold -m deps run
 ```
 
 Start application development loop:
 
 ```sh
-skaffold -m banzai-web-frontend dev
+skaffold -m app dev
 ```
 
 If there are any Ingresses, they should be exposed at:
