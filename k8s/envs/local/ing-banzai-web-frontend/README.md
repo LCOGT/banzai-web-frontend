@@ -13,7 +13,7 @@ Clone this package:
 kpt pkg get https://github.com/LCOGT/kpt-pkg-catalog/ingress ing-myname
 ```
 
-Customize `ingress.yaml`:
+Customize `ing.yaml`:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
