@@ -1,0 +1,20 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: ing-banzai-web-frontend
+  annotations:
+    config.kubernetes.io/local-config: "true"
+upstream:
+  type: git
+  git:
+    repo: https://github.com/LCOGT/kpt-pkg-catalog
+    directory: /ingress
+    ref: main
+  updateStrategy: resource-merge
+upstreamLock:
+  type: git
+  git:
+    repo: https://github.com/LCOGT/kpt-pkg-catalog
+    directory: /ingress
+    ref: main
+    commit: 81e8c158d4689201e87b076493dd4135985af6dc
