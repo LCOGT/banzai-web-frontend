@@ -32,11 +32,20 @@
               </MultiSelect>
             </v-col>
           </v-row>
-          <v-row>
-            <StartEndDatePicker
-              @input="onDateRangeChange"
-              enable-time-picker
-            ></StartEndDatePicker>
+          <v-row align="end">
+            <v-col></v-col>
+            <v-col>
+              <StartEndDatePicker
+                @input="onDateRangeChange"
+                enable-time-picker
+              ></StartEndDatePicker>
+            </v-col>
+            <v-col>
+              <v-checkbox
+                v-model="dailyStackingChecked"
+                :label="'Batch every 24 hours'"
+              ></v-checkbox>
+            </v-col>
           </v-row>
           <v-row class="justify-center">
             <v-btn
@@ -110,6 +119,7 @@ export default {
         start_date: this.stackingStartDate,
         end_date: this.stackingEndDate,
         calibration_types: this.selectedCalibrationTypes,
+        daily_stack: this.dailyStackingChecked,
       })
       $.post({
         url: this.$store.state.urls.banzaiWebApiUrl + 'api/stack_frames',

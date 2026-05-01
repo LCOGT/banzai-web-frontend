@@ -1,6 +1,7 @@
 # banzai-web-frontend
 
-## Development with Skaffold
+## Development
+See [DEVELOPMENT.md](DEVELOPMENT_K8s.md) for instructions on setting up a local development environment.
 
 It is simplest to start up a local copy of the [BANZAI-web backend](https://github.com/lcogt/banzai-web).
 If you do not want to start the backend, edit config.json in k8s/envs/local/ to `https://banzai-web-api.staging.lco.earth/`

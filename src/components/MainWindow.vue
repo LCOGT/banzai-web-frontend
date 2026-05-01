@@ -21,14 +21,31 @@
     </v-row>
     <v-row>
       <v-col :cols="2">
-        <v-card>
-          <v-card-title>
-            <p class="text-h6 text--primary">
-              What would <br />you like to do?
-            </p></v-card-title
-          >
-          <v-card-text>Select a workflow for more information!</v-card-text>
-        </v-card>
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-card-title>
+                <p class="text-h6 text--primary">
+                  What would <br />you like to do?
+                </p></v-card-title
+              >
+              <v-card-text>Select a workflow for more information!</v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card>
+              <v-card-title>
+                <p class="text-h6 text--primary">Find a request:</p>
+              </v-card-title>
+              <v-text-field v-model="reqnum" label="Request" class="mx-4">
+              </v-text-field>
+              <v-btn @click="loadRequest" variant="outlined">Request #</v-btn>
+              <v-btn @click="loadGroup">Group #</v-btn>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
       <v-divider vertical></v-divider>
       <v-col>
@@ -111,7 +128,9 @@ export default {
     NetworkFlatAgeTable,
   },
   data() {
-    return {}
+    return {
+      reqnum: '',
+    }
   },
   computed: {
     noInstrumentSelected: function () {
@@ -122,7 +141,21 @@ export default {
     },
   },
   mounted() {},
-  methods: {},
+  methods: {
+    loadRequest() {
+      if (this.reqnum.trim() != '') {
+        let requestURL = 'https://observe.lco.global/requests/' + this.reqnum
+        window.open(requestURL, '_blank')
+      }
+    },
+    loadGroup() {
+      if (this.reqnum.trim() != '') {
+        let requestURL =
+          'https://observe.lco.global/requestgroups/' + this.reqnum
+        window.open(requestURL, '_blank')
+      }
+    },
+  },
 }
 </script>
 
