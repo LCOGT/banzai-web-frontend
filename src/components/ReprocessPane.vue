@@ -35,7 +35,7 @@
     </v-row>
     <v-row>
       <v-col cols="8">
-        <v-btn color="success" class="mr-4" @click="getFrames"> Submit </v-btn>
+        <v-btn color="success" class="mr-4" @click="getFrames"> Search </v-btn>
       </v-col>
     </v-row>
     <v-row>

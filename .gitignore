@@ -23,4 +23,5 @@ pnpm-debug.log*
 *.sw?
 .devenv
 .pre-commit-config.yaml
+local-kubeconfig
 .direnv

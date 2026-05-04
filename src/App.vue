@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar id="title-bar" app dark color="#0b3053">
+    <v-app-bar id="title-bar" app dark color="grey">
       <v-img
         class="mx-2"
-        src="@/assets/wave.png"
+        src="@/assets/banzai-logo.png"
         max-height="40"
         max-width="40"
       ></v-img>

@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
-  - ./ing/
+  - ./ns-banzai-web-frontend.yaml
+  - ../../base/
+  - ./ing-banzai-web-frontend/
 
 configMapGenerator:
   - name: app-configuration
