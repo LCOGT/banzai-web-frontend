@@ -1,52 +1,52 @@
 # banzai-web-frontend
 
-## Development with Skaffold
+## Development
+See [DEVELOPMENT.md](DEVELOPMENT_K8s.md) for instructions on setting up a local development environment.
+
+It is simplest to start up a local copy of the [BANZAI-web backend](https://github.com/lcogt/banzai-web).
+If you do not want to start the backend, edit config.json in k8s/envs/local/ to `https://banzai-web-api.staging.lco.earth/`
 
 Enter development shell:
 
 ```shell
-nix develop --impure
+./develop.sh
 ```
 
 Start a local development container registry and Kubernetes cluster:
 
 ```shell
-ctlptl apply -f local-registry.yaml -f local-cluster.yaml
-```
-
-Deploy dependencies:
-
-```shell
-skaffold -p deps run
+devenv-k8s-cluster-up
 ```
 
 Start development loop:
 
 ```shell
-skaffold -p app dev --port-forward
+skaffold dev -m app
 ```
+
+You can access the frontend at <https://banzai-web.local.lco.earth>
 
 ## Development with yarn on bare metal
 
-```
+```shell
 yarn install
 ```
 
 ### Compiles and hot-reloads for development
 
-```
+```shell
 yarn serve
 ```
 
 ### Compiles and minifies for production
 
-```
+```shell
 yarn build
 ```
 
 ### Lints and fixes files
 
-```
+```shell
 yarn lint
 ```
 
