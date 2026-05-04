@@ -21,7 +21,7 @@ devenv-k8s-cluster-up
 Start development loop:
 
 ```shell
-skaffold -p app dev
+skaffold dev -m app
 ```
 
 You can access the frontend at <https://banzai-web.local.lco.earth>
