@@ -113,7 +113,10 @@ export default {
       default() {
         return [
           { text: 'Name', value: 'filename' },
+          { text: 'Filter', value: 'filter' },
+          { text: 'Date', value: 'date-obs' },
           { text: 'Observation Type', value: 'obstype' },
+          { text: 'Configuration Mode', value: 'conf_mode' },
           { text: 'Is Bad', value: 'is_bad' },
         ]
       },
