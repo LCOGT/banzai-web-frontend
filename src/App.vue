@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar id="title-bar" app dark color="grey">
+    <v-app-bar id="title-bar" app dark color="#1A237E">
       <v-img
         class="mx-2"
         src="@/assets/banzai-logo.png"
