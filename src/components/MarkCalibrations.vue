@@ -113,9 +113,9 @@ export default {
       default() {
         return [
           { text: 'Name', value: 'filename' },
-          { text: 'Filter', value: 'filter' },
-          { text: 'Date', value: 'date-obs' },
           { text: 'Observation Type', value: 'obstype' },
+          { text: 'Date', value: 'formattedDate' },
+          { text: 'Filter', value: 'filter' },
           { text: 'Configuration Mode', value: 'conf_mode' },
           { text: 'Is Bad', value: 'is_bad' },
         ]
@@ -166,6 +166,12 @@ export default {
         .done((response) => {
           this.calibrationFrameDataLoading = false
           this.calibrationFrameData = _.get(response, 'frames', [])
+          for (const obj of this.calibrationFrameData) {
+            const dateObj = new Date(obj['date-obs'])
+            let isoStr = dateObj.toISOString()
+            isoStr = isoStr.split('.')[0]
+            obj.formattedDate = isoStr.replace('T', ' ')
+          }
         })
         .fail((response) => {
           reportError(`Error retrieving calibration frames. Contact a softie.`)
