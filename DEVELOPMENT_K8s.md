@@ -51,5 +51,5 @@ skaffold -m app dev
 ```
 
 If there are any Ingresses, they should be exposed at:
-  - https://banzai-web-frontend.local.lco.earth
+  - https://banzai-web.local.lco.earth
   - https://<dependency>-<app>.local.lco.earth
